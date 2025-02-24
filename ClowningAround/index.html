@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-
+    <link rel="stylesheet" href="./CSS/index.css">
     <!-- update the version number as needed -->
+
     <script defer src="/__/firebase/11.3.1/firebase-app-compat.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/11.3.1/firebase-auth-compat.js"></script>
@@ -26,12 +27,15 @@
   
   </head>
   <body>
-    <div id="message">
-     welcom to our site
-     
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    
 
+      <div Class="Tab" id="tab1">
+          <h1>Game View</h1>
+      </div>
+      <div Class="Tab" id="tab2">
+        <h1>Score View</h1>
+      </div>
+  
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const loadEl = document.querySelector('#load');
