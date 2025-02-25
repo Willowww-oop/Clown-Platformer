@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 // TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,9 +14,29 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+//const app = firebase.initializeApp(firebaseConfig);
+
 
 import { getDatabase, ref, set } from "firebase/database";
 import { getDatabase, ref, onValue } from "firebase/database";
 
 console.log(app)
+
+//supposedly will give us a reference to the database
+
+import { getDatabase } from "firebase/database";
+
+const database = getDatabase();
+
+
+//This will supposedly read the database
+import { getDatabase, ref, onValue } from "firebase/database";
+
+const db = getDatabase();
+console.log(database);
+//const starCountRef = ref(db, 'posts/' + postId + '/starCount');
+//onValue(starCountRef, (snapshot) => {
+  //const data = snapshot.val();
+  //updateStarCount(postElement, data);
+//});
