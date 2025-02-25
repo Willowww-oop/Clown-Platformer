@@ -18,12 +18,13 @@
     <script defer src="/__/firebase/11.3.1/firebase-analytics-compat.js"></script>
     <script defer src="/__/firebase/11.3.1/firebase-remote-config-compat.js"></script>
     <script defer src="/__/firebase/11.3.1/firebase-performance-compat.js"></script>
+    
     <!-- 
       initialize the SDK after all desired features are loaded, set useEmulator to false
       to avoid connecting the SDK to running emulators.
     -->
+ 
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
   
   </head>
   <body>
@@ -31,11 +32,27 @@
 
       <div Class="Tab" id="tab1">
           <h1>Game View</h1>
+
+          <body>
+            <iframe src="https://playcanv.as/b/3d004b68" allow="camera; microphone; xr-spatial-tracking; fullscreen" allowfullscreen></iframe>
+        </body>
       </div>
       <div Class="Tab" id="tab2">
         <h1>Score View</h1>
       </div>
   
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const loadEl = document.querySelector('#load');
@@ -74,5 +91,9 @@
         }
       });
     </script>
+
+
+
+
   </body>
 </html>
