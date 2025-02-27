@@ -13,7 +13,7 @@
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-database-compat.js"></script>
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-firestore-compat.js"></script>
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-functions-compat.js"></script>
-    <!--<script defer type="application/json" src="/__/firebase/11.3.1/firebase-storage-compat.js"></script> -->
+    <!-- <script defer type="application/json" src="/__/firebase/11.3.1/firebase-storage-compat.js"></script> -->
     <!-- 
       initialize the SDK after all desired features are loaded, set useEmulator to false
       to avoid connecting the SDK to running emulators.
@@ -54,10 +54,10 @@
   //import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js'
 
   // Add Firebase products that you want to use
-  import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js'
-  import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js'
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
-
+  import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
+  import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
+  //import{getDatabase} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+  import{getDatabase, ref, onValue} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -66,20 +66,50 @@
     projectId: "clowning-around-40bd5",
     storageBucket: "clowning-around-40bd5.firebasestorage.app",
     messagingSenderId: "803045719396",
-    appId: "1:803045719396:web:5b5a4272c282a559810e71"
+    appId: "1:803045719396:web:5b5a4272c282a559810e71",
+
+    databaseURL: "https://clowning-around-40bd5-default-rtdb.firebaseio.com/",
   };
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
 
-  console.log(app);
+  const database = getDatabase(app);
 
-  
-  const database = getDatabase();
-  
   console.log(database);
-  
+
+  const dbRef = ref(database, 'players');
+
+  console.log(dbRef);
+
+  onValue(dbRef, (snapshot) => {
+  snapshot.forEach((childSnapshot) => {
+    const childKey = childSnapshot.key;
+    const childData = childSnapshot.val();
+    // ...
+    console.log("Seeing any data at all?");
+    console.log(childKey);
+    console.log(childData);
+  });
+}, {
+  onlyOnce: true
+});
+
+
+// //const playerRef = ref(db, 'players' + postId + '/starCount');
+// var data = null;
+//
+// //const playerRef = ref(database, 'players');
+//
+// const playerRef = ref(database);
+// onValue(playerRef, (snapshot) => {
+// console.log(snapshot.exists());
+// //const data = snapshot.val();
+// data = snapshot.val();
+// //updateStarCount(postElement, data);
+//);
+//console.log(data);
+
 
     </script>
   </body>
