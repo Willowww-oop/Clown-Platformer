@@ -57,7 +57,7 @@
   import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
   import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
   //import{getDatabase} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
-  import{getDatabase, ref, onValue} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+  import{getDatabase, ref, onValue, set, child} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -75,40 +75,26 @@
   const app = initializeApp(firebaseConfig);
 
   const database = getDatabase(app);
-
-  console.log(database);
-
-  const dbRef = ref(database, 'players');
-
-  console.log(dbRef);
-
-  onValue(dbRef, (snapshot) => {
-  snapshot.forEach((childSnapshot) => {
-    const childKey = childSnapshot.key;
-    const childData = childSnapshot.val();
-    // ...
-    console.log("Seeing any data at all?");
-    console.log(childKey);
-    console.log(childData);
-  });
-}, {
-  onlyOnce: true
-});
-
-
-// //const playerRef = ref(db, 'players' + postId + '/starCount');
-// var data = null;
 //
-// //const playerRef = ref(database, 'players');
-//
-// const playerRef = ref(database);
-// onValue(playerRef, (snapshot) => {
-// console.log(snapshot.exists());
-// //const data = snapshot.val();
-// data = snapshot.val();
-// //updateStarCount(postElement, data);
-//);
-//console.log(data);
+  //console.log(database);
+
+  const db = getDatabase();
+  const refT1 = ref(db, 'server/saving-data/fireblog');
+  //const refT2 = ref(database, 'server/saving-data/players')
+
+  //const usersRef = refT1.child('users');
+  const usersRef = ref(database, 'server/saving-data/players','players');
+  console.log(usersRef);
+  //ref(db, 'server/saving-data/players','players').set({
+  set(ref(database, 'server/saving-data/players','players'), {
+    player1: {
+      name: "Test01"
+    },
+    player2: {
+      name: "Example02"
+    }
+  })
+
 
 
     </script>
