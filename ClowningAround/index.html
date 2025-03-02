@@ -9,7 +9,7 @@
     <!-- update the version number as needed -->
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-app-compat.js"></script>
     <!-- include only the Firebase features as you need -->
-    <!-- <script defer type="application/json" src="/__/firebase/11.3.1/firebase-auth-compat.js"></script> -->
+    <script defer type="application/json" src="/__/firebase/11.3.1/firebase-auth-compat.js"></script>
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-database-compat.js"></script>
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-firestore-compat.js"></script>
     <script defer type="application/json" src="/__/firebase/11.3.1/firebase-functions-compat.js"></script>
@@ -57,7 +57,7 @@
   import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
   import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
   //import{getDatabase} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
-  import{getDatabase, ref, onValue, set, child} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+  import{getDatabase, ref, onValue, set, child, get, update} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -79,21 +79,43 @@
   //console.log(database);
 
   const db = getDatabase();
-  const refT1 = ref(db, 'server/saving-data/fireblog');
+  const refT1 = ref(database, 'server/saving-data/players');
   //const refT2 = ref(database, 'server/saving-data/players')
 
   //const usersRef = refT1.child('users');
-  const usersRef = ref(database, 'server/saving-data/players','players');
-  console.log(usersRef);
+  //const usersRef = ref(database, 'server/saving-data/players','players');
+  const playersRef = child( refT1, 'players');
+
+  console.log(playersRef);
   //ref(db, 'server/saving-data/players','players').set({
-  set(ref(database, 'server/saving-data/players','players'), {
+  //set(ref(database, 'server/saving-data/players','players'), {
+    //set(playersRef, {
+    update(playersRef, {
+
     player1: {
       name: "Test01"
     },
-    player2: {
+    player1: {
       name: "Example02"
     }
   })
+
+
+
+  get(refT1)
+    .then((snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            console.log(data);
+        } else {
+            console.log('No data available');
+        }
+    })
+    .catch((error) => {
+        console.error('Error reading data:', error);
+    });
+
+
 
 
 
