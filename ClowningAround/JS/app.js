@@ -80,7 +80,7 @@ const playersRef = child( fullRef, 'players');
 
 ////REMEMBER TO AWAIT ANY FUNCTION RETURNING DATA FROM DATABASE AT **ALL** LEVELS
 document.addEventListener('DOMContentLoaded',async function() {
-  pushNewPlayer("playerName05", "120", "1")
+  pushNewPlayer("playerName05", "120")
 
     //setData(playersRef);
     //updateData(playersRef);
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded',async function() {
 //          })
 //}
 
-function pushNewPlayer(playerName, playerHighScore, playerLevel)
+function pushNewPlayer(playerName, playerHighScore, playerLevel = 1)
 {
   //playersRef.push().set({
   push(playersRef, {
