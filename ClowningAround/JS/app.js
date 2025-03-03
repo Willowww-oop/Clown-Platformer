@@ -10,7 +10,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
 //import{getDatabase} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
-import{getDatabase, ref, onValue, set, child, get, update} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+import{getDatabase, ref, onValue, set, child, get, update, push} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -33,12 +33,13 @@ const db = getDatabase();
 
 //Setting Up References
 const fullRef = ref(database, 'server/saving-data/players');
+const playersRef = child( fullRef, 'players');
+
 //const refT2 = ref(database, 'server/saving-data/players')
 
 //const usersRef = refT1.child('users');
 //const usersRef = ref(database, 'server/saving-data/players','players');
 
-const playersRef = child( fullRef, 'players');
 
 //console.log(playersRef);
 //ref(db, 'server/saving-data/players','players').set({
@@ -79,14 +80,44 @@ const playersRef = child( fullRef, 'players');
 
 ////REMEMBER TO AWAIT ANY FUNCTION RETURNING DATA FROM DATABASE AT **ALL** LEVELS
 document.addEventListener('DOMContentLoaded',async function() {
-    setData(playersRef);
-    updateData(playersRef);
-    //console.log(getData(playersRef));
+  pushNewPlayer("playerName05", "120", "1")
+
+    //setData(playersRef);
+    //updateData(playersRef);
+    ////console.log(getData(playersRef));
     let x = await getData(playersRef);
     console.log(x.player1.name);
 });
 
-function setData(arg)
+//we shouldn't really directly SET data, so . . .  don't use this without good reason.
+//function setPlayerData(playerName, playerHighScore, playerLevel)
+//{
+//
+//    console.log(arg);
+//
+//    set(playersRef, {
+//            player1: {
+//              name: "Test01"
+//            },
+//            player2: {
+//              name: "Example02"
+//            }
+//          })
+//}
+
+function pushNewPlayer(playerName, playerHighScore, playerLevel)
+{
+  //playersRef.push().set({
+  push(playersRef, {
+    name: playerName,
+    highscore: playerHighScore,
+    level: playerLevel
+  });
+}
+
+
+
+function setPlayerData(arg)
 {
 
     console.log(arg);
@@ -100,6 +131,7 @@ function setData(arg)
             }
           })
 }
+
 
 
 function updateData(arg)
