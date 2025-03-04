@@ -1,0 +1,14 @@
+h1 {
+    font-size: 20px;
+    image-rendering: crisp-edges;
+    font-family:cursive;
+    color:cadetblue;
+}
+body {
+ background-color:rgb(100, 222, 227);
+}
+#game-view{
+  animation-direction: alternate;
+  position: static;
+  font-size: 20px;
+}
