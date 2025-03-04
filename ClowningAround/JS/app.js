@@ -80,7 +80,7 @@ const playersRef = child( fullRef, 'players');
 
 ////REMEMBER TO AWAIT ANY FUNCTION RETURNING DATA FROM DATABASE AT **ALL** LEVELS
 document.addEventListener('DOMContentLoaded',async function() {
-  pushNewPlayer("playerName05", "120", "1")
+//pushNewPlayer("playerName05", "120", "1")
 
     //setData(playersRef);
     //updateData(playersRef);
