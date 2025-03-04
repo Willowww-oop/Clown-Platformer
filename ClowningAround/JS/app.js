@@ -83,12 +83,16 @@ const npcsRef = child(fullRef, 'npcs');
 document.addEventListener('DOMContentLoaded',async function() {
   //pushNewPlayer("playerName05", "120")
   
+  //updatePlayerScore('Try04')
+
+  getPlayerID('Try04');
+
     //
     //setData(playersRef);
     //updateData(playersRef);
     ////console.log(getData(playersRef));
     let x = await getData(playersRef);
-    console.log(x.player1.name);
+    //console.log(x.player1.name);
 });
 
 //we shouldn't really directly SET data, so . . .  don't use this without good reason.
@@ -119,18 +123,20 @@ function pushNewPlayer(playerName, playerHighScore = 0, playerLevel = 1)
 
 function createTestPlayersBranch()
 {
-  pushNewPlayer('Test01');
-  pushNewPlayer('Example02', 206, 4);
-  pushNewPlayer('Attempt03', 0, 2);
-  pushNewPlayer('Try04', 30);
+  console.log('Do not execute: createTestPlayersBranch');
+  //pushNewPlayer('Test01');
+  //pushNewPlayer('Example02', 206, 4);
+  //pushNewPlayer('Attempt03', 0, 2);
+  //pushNewPlayer('Try04', 30);
 }
 
 function createTestNpcBranch()
 {
-  pushNewNpc('TestNPC', 'Test Dialogue One', 'Dialogue Option Two', 'Hello World');
-  pushNewNpc('SecondNPC', 'This is the Second NPC', 'This should not have any lines that TestNPC does', '>:P');
-  pushNewNpc('TestOneDefault', 'This NPC tests if the option 3 default value works', 'If it does, then option three will be an empty string');
-  pushNewNpc('TestBothDefaultValues', 'This NPC tests if the 2nd and third option defaults work');
+  console.log('Do not execute: createTestNpcsBranch');
+  //pushNewNpc('TestNPC', 'Test Dialogue One', 'Dialogue Option Two', 'Hello World');
+  //pushNewNpc('SecondNPC', 'This is the Second NPC', 'This should not have any lines that TestNPC does', '>:P');
+  //pushNewNpc('TestOneDefault', 'This NPC tests if the option 3 default value works', 'If it does, then option three will be an empty string');
+  //pushNewNpc('TestBothDefaultValues', 'This NPC tests if the 2nd and third option defaults work');
 }
 
 
@@ -147,9 +153,10 @@ function pushNewNpc(NPCname, option01, option02 = '', option03 = '')
   });
 }
 
+
 function updatePlayerScore(playerName, newScore)
 {
-
+  let updateRef = playersRef.child(playerName);
 }
 
 
@@ -202,5 +209,23 @@ function getData(arg)
     }).catch((error) => {
         console.error('Error reading data:', error);
     });
+}
+
+
+function getPlayerID(playerName)
+{
+  get(playersRef).then((snapshot) => {
+    if(snapshot.exists()) {
+      const data = snapshot.val();
+      console.log(data);
+      //data.forEach(element => {
+      //  if(element.name == playerName) {
+      //    //return element.
+      //    console.log(element.name);
+      //    console.log(element.highscore);
+      //  }
+      //});
+    }
+  })
 }
 
