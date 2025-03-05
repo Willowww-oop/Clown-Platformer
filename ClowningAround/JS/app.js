@@ -10,7 +10,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
 //import{getDatabase} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
-import{getDatabase, ref, onValue, set, child, get, update, push} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+import{getDatabase, ref, onValue, set, child, get, update, push, query, orderByChild, equalTo} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,6 +24,8 @@ const firebaseConfig = {
   databaseURL: "https://clowning-around-40bd5-default-rtdb.firebaseio.com/",
 };
 
+var holdID;
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -31,10 +33,11 @@ const database = getDatabase(app);
 const db = getDatabase();
 console.log(database);
 
+
 //Setting Up References
-const fullRef = ref(database, 'server/saving-data');
-const playersRef = child( fullRef, 'players');
-const npcsRef = child(fullRef, 'npcs');
+ const fullRef = ref(database, 'server/saving-data');
+ const playersRef = child( fullRef, 'players');
+ const npcsRef = child(fullRef, 'npcs');
 
 //const refT2 = ref(database, 'server/saving-data/players')
 
@@ -83,33 +86,24 @@ const npcsRef = child(fullRef, 'npcs');
 document.addEventListener('DOMContentLoaded',async function() {
   //pushNewPlayer("playerName05", "120")
   
-  //updatePlayerScore('Try04')
+  //updatePlayerScore('Try04', 120);
+  //updatePlayerLevel('Test01', 2);
 
-  getPlayerID('Try04');
+  let y = await getPlayerScore('Try04');
+  console.log(y);
 
-    //
-    //setData(playersRef);
-    //updateData(playersRef);
-    ////console.log(getData(playersRef));
+  //let id = await getPlayerID('Try04');
+  //console.log(id);
+  //console.log(getPlayerID('Try04'));
+  //getPlayerID('Try04').then(console.log(holdID));
+
     let x = await getData(playersRef);
     //console.log(x.player1.name);
+    //console.log(x.player1.name);
+
 });
 
-//we shouldn't really directly SET data, so . . .  don't use this without good reason.
-//function setPlayerData(playerName, playerHighScore, playerLevel)
-//{
-//
-//    console.log(arg);
-//
-//    set(playersRef, {
-//            player1: {
-//              name: "Test01"
-//            },
-//            player2: {
-//              name: "Example02"
-//            }
-//          })
-//}
+
 
 function pushNewPlayer(playerName, playerHighScore = 0, playerLevel = 1)
 {
@@ -119,6 +113,113 @@ function pushNewPlayer(playerName, playerHighScore = 0, playerLevel = 1)
     highscore: playerHighScore,
     level: playerLevel
   });
+}
+
+
+
+
+//update will not work. We'll have to use push
+function pushNewNpc(NPCname, option01, option02 = '', option03 = '')
+{
+  push(npcsRef, {
+    npcname: NPCname,
+    dialogue: {
+      dialogue01: option01,
+      dialogue02: option02,
+      dialogue03: option03
+    }  
+  });
+}
+
+
+function updatePlayerScore(playerName, newScore)
+{
+  const idQuery = query(playersRef, orderByChild('name'), equalTo(playerName));
+  // console.log("stuff: ", stuff.val())
+  onValue(idQuery, (snapshot) => {
+    const data = snapshot.val();
+    let updateRef = child(playersRef, Object.keys(data)[0]);
+    //let updateScoreRef = child(updateRef, 'highscore');
+    update(updateRef, {
+      highscore: newScore
+    })
+    //holdID = Object.keys(data)[0];
+    //return Object.keys(data)[0];
+  });
+}
+
+function updatePlayerLevel(playerName, newLevel)
+{
+  const idQuery = query(playersRef, orderByChild('name'), equalTo(playerName));
+  onValue(idQuery, (snapshot) => {
+    const data = snapshot.val();
+    let updateRef = child(playersRef, Object.keys(data)[0]);
+    update(updateRef, {
+      level: newLevel
+    })
+  });
+}
+
+
+async function getPlayerScore(playerName)
+{    
+    const idQuery = query(playersRef, orderByChild('name'), equalTo(playerName));
+    return await onValue(idQuery, async (snapshot) => {
+      const data = snapshot.val();
+      let updateRef = child(playersRef, Object.keys(data)[0]);
+      return await get(updateRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const playerData = snapshot.val();            //alert(JSON.stringify(data));
+            //console.log(data.highscore);
+            return playerData.highscore;                       //alert(JSON.stringify(returnVal));
+        } else {
+          console.log('No data available');
+        }
+      }).catch((error) => {
+        console.error('Error reading data:', error);
+      });
+  });  
+}
+
+
+
+
+
+
+
+function getData(arg)
+{
+    console.log(arg);
+    let returnVal;
+    return get(arg).then((snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();            //alert(JSON.stringify(data));
+            //console.log(data);
+            return data;                       //alert(JSON.stringify(returnVal));
+        } else {
+            console.log('No data available');
+        }
+    }).catch((error) => {
+        console.error('Error reading data:', error);
+    });
+}
+
+
+async function getPlayerID(playerName)
+{
+  const stuff = query(playersRef, orderByChild('name'), equalTo(playerName));
+  // console.log("stuff: ", stuff.val())
+  return onValue(stuff, (snapshot) => {
+    const data = snapshot.val();
+    //console.log(data)
+    //console.log(Object.keys(data));
+    //console.log(Object.keys(data)[0]);
+    holdID = Object.keys(data)[0];
+    return Object.keys(data)[0];
+    // updateStarCount(postElement, data);
+  });
+
+  
 }
 
 function createTestPlayersBranch()
@@ -139,29 +240,6 @@ function createTestNpcBranch()
   //pushNewNpc('TestBothDefaultValues', 'This NPC tests if the 2nd and third option defaults work');
 }
 
-
-//update will not work. We'll have to use push
-function pushNewNpc(NPCname, option01, option02 = '', option03 = '')
-{
-  push(npcsRef, {
-    npcname: NPCname,
-    dialogue: {
-      dialogue01: option01,
-      dialogue02: option02,
-      dialogue03: option03
-    }  
-  });
-}
-
-
-function updatePlayerScore(playerName, newScore)
-{
-  let updateRef = playersRef.child(playerName);
-}
-
-
-
-
 //function setPlayerData(arg)
 //{
 //
@@ -177,55 +255,34 @@ function updatePlayerScore(playerName, newScore)
 //          })
 //}
 
+//function updateData(arg)
+//{
+//
+//    console.log(arg);
+//
+//    update(arg, {
+//            player3: {
+//              name: "Try03"
+//            },
+//            player4: {
+//              name: "Attempt04"
+//            }
+//          })
+//}
 
 
-function updateData(arg)
-{
-
-    console.log(arg);
-
-    update(arg, {
-            player3: {
-              name: "Try03"
-            },
-            player4: {
-              name: "Attempt04"
-            }
-          })
-}
-
-function getData(arg)
-{
-    console.log(arg);
-    let returnVal;
-    return get(arg).then((snapshot) => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();            //alert(JSON.stringify(data));
-            //console.log(data);
-            return data;                       //alert(JSON.stringify(returnVal));
-        } else {
-            console.log('No data available');
-        }
-    }).catch((error) => {
-        console.error('Error reading data:', error);
-    });
-}
-
-
-function getPlayerID(playerName)
-{
-  get(playersRef).then((snapshot) => {
-    if(snapshot.exists()) {
-      const data = snapshot.val();
-      console.log(data);
-      //data.forEach(element => {
-      //  if(element.name == playerName) {
-      //    //return element.
-      //    console.log(element.name);
-      //    console.log(element.highscore);
-      //  }
-      //});
-    }
-  })
-}
-
+//we shouldn't really directly SET data, so . . .  don't use this without good reason.
+//function setPlayerData(playerName, playerHighScore, playerLevel)
+//{
+//
+//    console.log(arg);
+//
+//    set(playersRef, {
+//            player1: {
+//              name: "Test01"
+//            },
+//            player2: {
+//              name: "Example02"
+//            }
+//          })
+//}
