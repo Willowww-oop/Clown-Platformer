@@ -213,11 +213,13 @@ function getTopScores()
     }
     playersScores.sort((a,b) => b[1] - a[1]);
 
-    //let topPlayerArray = []
-    for(var i = 0; i < 4; i++)
+    for(var i = 0; i < 10 && i < playersScores.length; i++)
     {
-      //topPlayerArray.push([allPlayerArray[i]])
       displayHighScore(i + 1, playersScores[i][0], playersScores[i][1]);
+    }
+    for(i; i < 10; i++)
+    {
+      displayHighScore(false, false, false);
     }
   });
 }
@@ -243,7 +245,7 @@ function displayHighScore(id, name, score) {
   //const highScoreElement = document.getElementById('high-score-display');
   const highScoreElement = document.getElementById(id);
 
-  if(score === undefined) {
+  if(score === false) {
     highScoreElement.innerHTML = '&minus;&minus;&minus;&minus;';
   } else {
     highScoreElement.innerHTML = name + ': ' + score;
