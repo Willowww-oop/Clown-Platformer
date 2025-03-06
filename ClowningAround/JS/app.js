@@ -10,7 +10,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
 //import{getDatabase} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
-import{getDatabase, ref, onValue, set, child, get, update, push, query, orderByChild, equalTo} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+import{getDatabase, ref, onValue, set, child, get, update, push, query, orderByChild, equalTo, limitToLast} from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -37,6 +37,7 @@ console.log(database);
 //Setting Up References
  const fullRef = ref(database, 'server/saving-data');
  const playersRef = child( fullRef, 'players');
+ //var playersName;
  const npcsRef = child(fullRef, 'npcs');
 
 //const refT2 = ref(database, 'server/saving-data/players')
@@ -84,20 +85,28 @@ console.log(database);
 
 ////REMEMBER TO AWAIT ANY FUNCTION RETURNING DATA FROM DATABASE AT **ALL** LEVELS
 document.addEventListener('DOMContentLoaded',async function() {
+
+  //playersName = 'Try04';
+  //runAfterPlayerNamed();
+
+  getTopScores();
+
   //pushNewPlayer("playerName05", "120")
   
   //updatePlayerScore('Try04', 120);
   //updatePlayerLevel('Test01', 2);
 
-  let y = await getPlayerScore('Try04');
-  console.log(y);
+  //let y = await getPlayerScore('Try04');
+  //console.log(y);
+
+  //getTopScores();
 
   //let id = await getPlayerID('Try04');
   //console.log(id);
   //console.log(getPlayerID('Try04'));
   //getPlayerID('Try04').then(console.log(holdID));
 
-    let x = await getData(playersRef);
+    //let x = await getData(playersRef);
     //console.log(x.player1.name);
     //console.log(x.player1.name);
 
@@ -161,6 +170,14 @@ function updatePlayerLevel(playerName, newLevel)
 }
 
 
+//function getPlayerScore(data)
+//{
+//  let updateRef = child(playersRef, Object.keys(data)[0]);
+//  return get(updateRef).then(() => {return data.highscore;});
+//}
+
+
+
 async function getPlayerScore(playerName)
 {    
     const idQuery = query(playersRef, orderByChild('name'), equalTo(playerName));
@@ -180,6 +197,60 @@ async function getPlayerScore(playerName)
       });
   });  
 }
+
+
+function getTopScores()
+{    
+  get(playersRef).then((snapshot) => {
+    let data = snapshot.val();
+    let propNames = Object.getOwnPropertyNames(data);
+    //let allPlayerArray = [];
+    let playersScores = [];
+    for(const propName of propNames)
+    {
+      let propVal = data[propName];
+      playersScores.push([propVal.name, propVal.highscore]);
+    }
+    playersScores.sort((a,b) => b[1] - a[1]);
+
+    //let topPlayerArray = []
+    for(var i = 0; i < 4; i++)
+    {
+      //topPlayerArray.push([allPlayerArray[i]])
+      displayHighScore(i + 1, playersScores[i][0], playersScores[i][1]);
+    }
+  });
+}
+
+
+
+
+
+
+//displayHighScore = function(score) {
+//function displayHighScore(score) {
+//  //const highScoreElement = document.getElementById('high-score-display');
+//  const highScoreElement = document.getElementById('1');
+//
+//  if(score === undefined) {
+//    highScoreElement.innerHTML = '&minus;&minus;&minus;&minus;';
+//  } else {
+//    highScoreElement.innerHTML = score;
+//  }
+//}
+
+function displayHighScore(id, name, score) {
+  //const highScoreElement = document.getElementById('high-score-display');
+  const highScoreElement = document.getElementById(id);
+
+  if(score === undefined) {
+    highScoreElement.innerHTML = '&minus;&minus;&minus;&minus;';
+  } else {
+    highScoreElement.innerHTML = name + ': ' + score;
+  }
+}
+
+
 
 
 
